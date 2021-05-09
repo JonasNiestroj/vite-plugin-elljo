@@ -1,0 +1,14 @@
+{
+  "name": "jo-loader",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "jo": "file:/~/go/src/jo/npm/jo-0.0.1.tgz",
+    "jo-loader": "file:/../jo-loader-0.0.1.tgz",
+    "vite": "^2.2.4"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "jo-loader",
+  "version": "0.0.1",
+  "description": "A webpack loader for the jo framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "chalk": "^4.1.1",
+    "jo": "file:/~/go/src/jo/npm/jo-0.0.1.tgz",
+    "jsdom": "^16.5.3",
+    "prismjs": "^1.23.0"
+  },
+  "author": "Jonas Niestroj",
+  "license": "ISC"
+}

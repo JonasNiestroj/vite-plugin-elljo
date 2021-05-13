@@ -17,9 +17,14 @@ function jo() {
           var spawn = require('child_process').spawn
           const child = spawn(path.join(__dirname, '../', '.bin/jo'), ['--service']);
           var command = `compile ${source.replace(/\r?\n|\r/g, "\\n")}`
-          child.stdin.write(Buffer.from(command, 'utf8'));
+          var buffer = Buffer.from(command, 'utf8')
+          let outputJson = ""
+          child.stdin.write(buffer);
           child.stdout.on('data', function (data) {
-            let output = JSON.parse(data.toString())
+            outputJson += data.toString()
+          });
+          child.on('close', () => {
+            let output = JSON.parse(outputJson)
             // If the output is an array it is an array of errors
             if (Array.isArray(output)) {
               reject({message: "Parsing of " + id + " failed"})
@@ -64,8 +69,8 @@ function jo() {
                 map: output.sourcemap
               })
             }
-            
-          });
+
+          })
           child.stdin.end();
         });
       }

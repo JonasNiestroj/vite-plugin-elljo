@@ -5,8 +5,8 @@ theme.token = {};
 
 theme.background = chalk.bgHex('#fdfdfd');
 
-theme.backgroundAlt = theme.background; // probably unused.
-theme.toEOL = theme.background;;
+theme.backgroundAlt = theme.background;
+theme.toEOL = theme.background;
 theme.inlineSpace = theme.background;
 
 theme.token["comment"] = chalk.hex('#575757');

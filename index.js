@@ -14,7 +14,7 @@ function jo() {
       if (fileRegex.test(id)) {
         return new Promise((resolve, reject) => {
           var spawn = require('child_process').spawn
-          const child = spawn(path.join(__dirname, '../', '.bin/jo'), ['--service']);
+          const child = spawn(path.join(__dirname, '../', '.bin/elljo-compiler'), ['--service']);
           var command = `compile ${id.split("/").pop()} ${source.replace(/\r?\n|\r/g, "\\n")}`
           var buffer = Buffer.from(command, 'utf8')
           let outputJson = ""

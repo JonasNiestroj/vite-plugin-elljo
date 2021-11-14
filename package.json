@@ -1,5 +1,5 @@
 {
-    "name": "elljo-loader",
+    "name": "vite-plugin-elljo",
     "version": "0.0.1",
     "description": "A vite loader for the elljo framework",
     "main": "index.js",

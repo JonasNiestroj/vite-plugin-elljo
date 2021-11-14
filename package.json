@@ -1,17 +1,18 @@
 {
-  "name": "elljo-loader",
-  "version": "0.0.1",
-  "description": "A vite loader for the elljo framework",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "chalk": "^4.1.1",
-    "jo": "file:/~/go/src/jo/npm/jo-0.0.1.tgz",
-    "jsdom": "^16.5.3",
-    "prismjs": "^1.23.0"
-  },
-  "author": "Jonas Niestroj",
-  "license": "MIT"
+    "name": "elljo-loader",
+    "version": "0.0.1",
+    "description": "A vite loader for the elljo framework",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "@elljo/compiler": "file://~/go/src/jo/npm/elljo-0.0.1.tgz",
+        "chalk": "^4.1.1",
+        "jsdom": "^16.5.3",
+        "postcss": "^8.3.11",
+        "prismjs": "^1.23.0"
+    },
+    "author": "Jonas Niestroj",
+    "license": "MIT"
 }

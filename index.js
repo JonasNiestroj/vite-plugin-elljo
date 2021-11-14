@@ -2,17 +2,33 @@ const fileRegex = /\.jo$/
 const path = require('path')
 const chalk = require('chalk')
 const highlight = require('./highlight')
+const postcssrc = require('postcss-load-config')
+const postcssConfig = postcssrc.sync()
 
 const getDigits = (number) => {
   return Math.log(number) * Math.LOG10E + 1 | 0;
 }
+
+const styleRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gm
+const langRegex = /<style lang="(.*)">/gm
 
 function jo() {
   return {
     name: 'jo-loader',
     transform(source, id) {
       if (fileRegex.test(id)) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
+          let match = null;
+          while (match = styleRegex.exec(source)) {
+            const lang = langRegex.exec(match[0])
+            if (lang[1]) {
+              if (lang[1] === "postcss") {
+                const postcss = require('postcss')
+                const result = await postcss(postcssConfig.plugins).process(match[1])
+                source = source.replace(match[1], result.css)
+              }
+            }
+          }
           var spawn = require('child_process').spawn
           const child = spawn(path.join(__dirname, '../', '.bin/elljo-compiler'), ['--service']);
           var command = `compile ${id.split("/").pop()} ${source.replace(/\r?\n|\r/g, "\\n")}`

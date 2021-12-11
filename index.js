@@ -2,8 +2,6 @@ const fileRegex = /\.jo$/
 const path = require('path')
 const chalk = require('chalk')
 const highlight = require('./highlight')
-const postcssrc = require('postcss-load-config')
-const postcssConfig = postcssrc.sync()
 
 const getDigits = (number) => {
   return Math.log(number) * Math.LOG10E + 1 | 0;
@@ -11,21 +9,43 @@ const getDigits = (number) => {
 
 const styleRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gm
 const langRegex = /<style lang="(.*)">/gm
+const cssCache = {}
+
+const parseId = (id) => {
+  const split = id.split("?")
+  return { file: split[0], query: split[1] }
+}
+
+const replaceInString = (text, start, end, newText) => {
+  return text.substring(0, start) + newText + text.substring(end)
+}
 
 function jo() {
   return {
     name: 'jo-loader',
+    load(id) {
+      const parsedId = parseId(id)
+      if (parsedId.query && parsedId.file.endsWith(".jo")) {
+        const searchParams = new URLSearchParams(parsedId.query)
+        if (searchParams.get("type") === 'style' && cssCache[parsedId.file]) {
+          return cssCache[parsedId.file]
+        }
+      }
+    },
     transform(source, id) {
       if (fileRegex.test(id)) {
         return new Promise(async (resolve, reject) => {
           let match = null;
           while (match = styleRegex.exec(source)) {
             const lang = langRegex.exec(match[0])
-            if (lang[1]) {
+            if (lang && lang[1]) {
               if (lang[1] === "postcss") {
                 const postcss = require('postcss')
-                const result = await postcss(postcssConfig.plugins).process(match[1])
-                source = source.replace(match[1], result.css)
+                const postcssrc = require('postcss-load-config')
+                const postcssConfig = postcssrc.sync()
+                const indexOfInSource = source.indexOf(match[1])
+                const result = await postcss(postcssConfig.plugins).process(match[1], { from: undefined })
+                source = replaceInString(source, indexOfInSource, indexOfInSource + match[1].length, result.css)
               }
             }
           }
@@ -79,8 +99,13 @@ function jo() {
                 })
               }, 100)
             } else {
+              let code = output.output
+              if (output.css) {
+                code += `;import "${id}?type=style&lang.css"`
+                cssCache[id] = output.css
+              }
               resolve({
-                code: output.output,
+                code: code,
                 map: output.sourcemap
               })
             }

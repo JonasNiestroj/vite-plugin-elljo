@@ -1,13 +1,13 @@
 {
     "name": "vite-plugin-elljo",
-    "version": "0.0.2-alpha",
+    "version": "0.0.3-alpha",
     "description": "A vite loader for the elljo framework",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
-        "@elljo/compiler": "0.0.1-alpha",
+        "@elljo/compiler": "0.0.2-alpha",
         "chalk": "^4.1.1",
         "jsdom": "^16.5.3",
         "postcss": "^8.3.11",

@@ -72,11 +72,11 @@ const compileEllJoCode = (source, parsedId) => {
   });
 };
 
-const handleErrors = (output) => {
+const handleErrors = (source, parsedId, output) => {
   output.forEach((error) => {
     console.log('\n');
     console.log(
-      chalk`{bgRed.black   Error  } {white in file ${id} on line ${error.line}}`
+      chalk`{bgRed.black   Error  } {white in file ${parsedId.file} on line ${error.line}}`
     );
     console.log('');
     console.log(error.message);
@@ -96,7 +96,8 @@ const handleErrors = (output) => {
           errorUnderline += ' ';
         }
         errorUnderline += chalk.gray(' | ');
-        for (let j = 0; j < error.endColumn; j++) {
+
+        for (let j = 1; j <= error.endColumn; j++) {
           if (j >= error.startColumn) {
             errorUnderline += chalk.red('^');
           } else {
@@ -124,7 +125,7 @@ const handleEllJoTransform = (source, parsedId) => {
     if (Array.isArray(output)) {
       reject({ message: 'Parsing of ' + parsedId.file + ' failed' });
       setTimeout(() => {
-        handleErrors(output);
+        handleErrors(source, parsedId, output);
       }, 100);
     } else {
       let code = output.output;

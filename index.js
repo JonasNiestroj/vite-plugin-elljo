@@ -52,23 +52,22 @@ const handlePostCss = async (source) => {
 const compileEllJoCode = (source, parsedId) => {
   return new Promise((resolve, reject) => {
     var spawn = require('child_process').spawn;
-    const child = spawn(path.join(__dirname, '../', '.bin/elljo-compiler'), [
-      '--service',
-    ]);
-    var command = `compile ${parsedId.file.split('/').pop()} ${source.replace(
-      /\r?\n|\r/g,
-      '\\n'
-    )}`;
+    const child = spawn(
+      path.join(__dirname, '../', '.bin/elljo-compiler'),
+      ['--service'],
+      { stdio: ['pipe', 'pipe', 'inherit'] }
+    );
+    var command = `compile ${parsedId.file.split('/').pop()} ${source}`;
+
     var buffer = Buffer.from(command, 'utf8');
-    let outputJson = '';
+
+    child.stdin.setEncoding('utf-8');
     child.stdin.write(buffer);
-    child.stdout.on('data', function (data) {
-      outputJson += data.toString();
-    });
-    child.on('close', () => {
-      resolve(JSON.parse(outputJson));
-    });
     child.stdin.end();
+
+    child.stdout.on('data', function (data) {
+      resolve(JSON.parse(data.toString()));
+    });
   });
 };
 
